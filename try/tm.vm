@@ -1,0 +1,767 @@
+
+#**
+引入示例
+/**
+ * <li><b>申请售后服务页面引入示例</b>$control.setTemplate("common/order.vm").setParameter("orderId", $!orderId).setParameter("requiredType", $!requiredType)
+ * <li><b>卖家详情页面引入</b>$control.setTemplate("common/order.vm").setParameter("userRole", "seller")
+ * <li><b>买家详情页面引入</b>$control.setTemplate("common/order.vm").setParameter("userRole", "buyer")
+ * */
+**#
+
+#if($!order)
+##有order订单，为申请页面
+<!-- 订单 信息START -->
+<aside  class="f-l order aside"  data-spm="1000703">
+
+    <div class="order-header">
+        <strong>$!requiredTypeText</strong>
+    </div>
+    <table cellspacing="0" cellpadding="0" class="rf-table">
+        <colgroup>
+            <col width="70">
+            <col>
+        </colgroup>
+        <tbody>
+        <tr class="goods-wrapper">
+            <th>
+
+                <img title="$order.auctionTitle" class="goods-img"
+                     src="#if($tbStringUtil.isNotEmpty($!order.auctionPictUrl))${uploadImageServer.getURI($!order.auctionPictUrl)}_sum.jpg #else $!picsServer.getURI('/bao/album/sys/icon/nopic.gif')#end"/>
+
+            </th>
+            <td>
+                <p class="goods-title">
+                    <a href="${tradeModule.setTarget('/detail/trade_item_detail.htm').addQueryData('bizOrderId',${order.parentId})}"
+                       target="_blank">$!securityUtil.richtext($!{order.AuctionTitle})</a>
+                </p>
+                <p class="goods-sku">
+                #if($!stringUtil.isNotEmpty($!orderUtil.getSkuStr($!order)))
+					<p class="goods-sku">$!securityUtil.richtext($orderUtil.getSkuTitle($!order))</p>
+				#end
+                </p>
+                
+                <p class="goods-icons"> 
+	                ##消保图片样式
+					#if("1"=="$!{order.getAttribute('j13')}")
+						<a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_jyps.php?ad_id=&am_id=1300118304240d56fca9&cm_id=&pm_id=" title="消费者保障服务，卖家承诺假一赔三" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/an_authentic_item_16x16.png')}" alt="消费者保障服务，卖家承诺假一赔三" /></a>
+					#end
+					##检查是否支持数码与家电30天维修
+					#if("1"=="$!{order.getAttribute('3c3')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_wx.php?ad_id=&am_id=13001183050ce2498755&cm_id=&pm_id=" title="消费者保障服务，卖家承诺30天维修" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_30-day_guarantee_16x16.png')}" alt="消费者保障服务，卖家承诺30天维修" /></a>
+					#end
+					##检测是否闪电发货
+					#if("1"=="$!{order.getAttribute('qk')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_sdfh.php?ad_id=&am_id=13001183083c787ce2b4&cm_id=&pm_id=" title="卖家承诺付款后1小时发货" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_thunder-like_delivery_16x16.png')}" alt="卖家承诺付款后1小时发货" /></a>
+					#end
+					##实物闪电发货（商品打标项目增加：也是一种消保服务，和虚拟物品闪电发货共用一个消保图标,业务细节请咨询凌宝）
+					#if($!{orderUtil.getItemTagContainer($!order).isSwift()})
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_sdfh.php?ad_id=&am_id=13001183083c787ce2b4&cm_id=&pm_id=" title="卖家承诺付款后24小时内发货" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_thunder-like_delivery_16x16.png')}" alt="卖家承诺付款后24小时内发货" /></a>
+					#end
+					##检查是否是7天无理由
+					#if("1"=="$!{order.getAttribute('7d')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xbqt090304.php?ad_id=&am_id=130011831021c2f3caab&cm_id=&pm_id=" title="消费者保障服务，卖家承诺7天退换" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_7-day_return_16x16.png')}" alt="消费者保障服务，卖家承诺7天退换" /></a>
+					#end
+					##检测是否先行赔付(如实描述)
+					#if("1"=="$!{order.getAttribute('ppay')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_rsms.php?ad_id=&am_id=130011830696bce9eda3&cm_id=&pm_id=" title="消费者保障服务，卖家承诺如实描述" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_true_description_16x16.png')}" alt="消费者保障服务，卖家承诺如实描述" /></a>
+					#end
+					##检测是否正品保障
+					#if("1"=="$!{order.getAttribute('zpbz')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_zpbz.php?ad_id=&am_id=130011830709c0515500&cm_id=&pm_id=" title="消费者保障服务，卖家承诺正品保障" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_quality_item_16x16.png')}" alt="消费者保障服务，卖家承诺正品保障" /></a>
+					#end
+                </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table cellspacing="0" cellpadding="0" class="rf-table">
+        <colgroup>
+            <col width="70">
+            <col>
+        </colgroup>
+        <tbody>
+        <tr>
+            <th>
+                单价：
+            </th>
+            <td>$!moneyUtil.getMoney($!{order.auctionPrice}) 元 * $!{order.buyAmount}（数量）</td>
+        </tr>
+        <tr>
+            <th>
+                宝贝优惠：
+            </th>
+            <td>
+            #if(!$!orderUtil.isTbVip($!order) && !$!orderUtil.isBonus($!order) && !$!orderUtil.isTjk($!order) && !$!orderUtil.isVip($!order) && $!order.getAdjustFee()==0 && !$!orderUtil.isCombo($!order))
+            	无优惠
+            #else
+            	#if($orderUtil.isTbVip($!order))
+        			<li><img src="$!{assetsServer.getURI('/sys/common/icon/trade/discount_vip.png')}" alt="vip"></li>
+        		#end
+        		#if($orderUtil.isBonus($order))
+        			<li><img alt="抵价券" src="$!{assetsServer.getURI('/sys/common/icon/trade/discount.png')}"/></li>
+        		#end
+        		#if($orderUtil.isTjk($order))
+        			<li><img alt="其它优惠" src="$!{assetsServer.getURI('/sys/common/icon/trade/discount_other.png')}"/></li>
+        		#end
+        		#if($orderUtil.isVip($order))
+        			<li><img alt="店铺VIP" src="$!{assetsServer.getURI('/sys/common/icon/trade/discount_shop_vip.png')}"/></li>
+				#end
+        		#if($!{order.getAdjustFee()} && $!{order.getAdjustFee()} != 0)
+        			<li>卖家优惠$!moneyUtil.getMoney($!{order.getAdjustFee()})元</li>
+        		#end
+        		#if($orderUtil.isCombo($order))
+        			<li>套餐优惠$!moneyUtil.getMoney(${order.getDiscountFee()})元</li>
+        	    #end
+            #end
+            </td>
+        </tr>
+        <tr>
+            <th>
+                宝贝实付：
+            </th>
+            <td> <em class="money">$!moneyUtil.getMoney($math.add($math.sub($math.mul($!{order.getAuctionPrice()},$!{order.getBuyAmount()}),$!{order.getDiscountFee()}),$!{order.getAdjustFee()}))</em>元</td>
+        </tr>
+        <tr>
+            <th>
+                运费：
+            </th>
+            <td> $!moneyUtil.getMoney($!logistics.getPostFee()) 元</td>
+        </tr>
+        <tr>
+            <th>
+                订单编号：
+            </th>
+            <td> <a class="text-link" href="${tradeModule.setTarget('/detail/trade_item_detail.htm').addQueryData('bizOrderId',$!{payOrder.payOrderId})}" target="_blank">$!{payOrder.payOrderId}</a> </td>
+        </tr>
+        </tbody>
+    </table>
+    <hr />
+    <table cellspacing="0" cellpadding="0" id="J_OrderInfo" class="rf-table seller-itemInfo">
+        <colgroup>
+            <col width="70">
+            <col>
+        </colgroup>
+        <tbody>
+        <tr>
+            <th>
+                卖家：
+            </th>
+            <td> <a href="${memberModule.setTarget('/userProfile.jhtml').addQueryData('userID',$!{order.getSellerId()})}" target="_blank">$!{order.sellerNick}</a>
+            	<span class="J_WangWang" data-nick="$!{order.sellerNick}"></span></td>
+        </tr>
+        
+        </tbody>
+    </table>
+</aside>
+<!-- 订单 end-->
+##----------------------------------------------------------------------------------------------------------------------------------------##
+##----------------------------------------------------------------------------------------------------------------------------------------##
+##----------------------------------------------------------------------------------------------------------------------------------------##
+#elseif($!detail)
+##有detialVO，为详情页面
+<!-- 订单 信息START -->
+<aside  class="f-r order aside"  data-spm="1000703">
+
+    <div class="order-header">
+        <strong>$!detail.getRequiredTypeText()</strong>
+    </div>
+    <table cellspacing="0" cellpadding="0" class="rf-table">
+        <colgroup>
+            <col width="70">
+            <col>
+        </colgroup>
+        <tbody>
+        <tr class="goods-wrapper">
+            <th>
+
+                <img title="$detail.order.auctionTitle" class="goods-img"
+                     src="#if($tbStringUtil.isNotEmpty($!detail.order.auctionPictUrl))${uploadImageServer.getURI($!detail.order.auctionPictUrl)}_sum.jpg #else $!picsServer.getURI('/bao/album/sys/icon/nopic.gif')#end"/>
+
+            </th>
+            <td>
+            #if(${detail.order})##订单为空这段没有意义
+                <p class="goods-title">
+                    <a href="${tradeModule.setTarget('/detail/trade_item_detail.htm').addQueryData('bizOrderId',${detail.order.parentId})}"
+                       target="_blank">$!securityUtil.richtext($!{detail.order.AuctionTitle})</a>
+                </p>
+                <p class="goods-sku">
+                #if($!stringUtil.isNotEmpty($!orderUtil.getSkuStr($!detail.order)))
+					<p class="goods-sku">$!securityUtil.richtext($orderUtil.getSkuTitle($!detail.order))</p>
+				#end
+                </p>
+                
+                <p class="goods-icons"> 
+	                ##消保图片样式
+					#if("1"=="$!{detail.order.getAttribute('j13')}")
+						<a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_jyps.php?ad_id=&am_id=1300118304240d56fca9&cm_id=&pm_id=" title="消费者保障服务，卖家承诺假一赔三" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/an_authentic_item_16x16.png')}" alt="消费者保障服务，卖家承诺假一赔三" /></a>
+					#end
+					##检查是否支持数码与家电30天维修
+					#if("1"=="$!{detail.order.getAttribute('3c3')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_wx.php?ad_id=&am_id=13001183050ce2498755&cm_id=&pm_id=" title="消费者保障服务，卖家承诺30天维修" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_30-day_guarantee_16x16.png')}" alt="消费者保障服务，卖家承诺30天维修" /></a>
+					#end
+					##检测是否闪电发货
+					#if("1"=="$!{detail.order.getAttribute('qk')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_sdfh.php?ad_id=&am_id=13001183083c787ce2b4&cm_id=&pm_id=" title="卖家承诺付款后1小时发货" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_thunder-like_delivery_16x16.png')}" alt="卖家承诺付款后1小时发货" /></a>
+					#end
+					##实物闪电发货（商品打标项目增加：也是一种消保服务，和虚拟物品闪电发货共用一个消保图标,业务细节请咨询凌宝）
+					#if($!{orderUtil.getItemTagContainer($!detail.order).isSwift()})
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_sdfh.php?ad_id=&am_id=13001183083c787ce2b4&cm_id=&pm_id=" title="卖家承诺付款后24小时内发货" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_thunder-like_delivery_16x16.png')}" alt="卖家承诺付款后24小时内发货" /></a>
+					#end
+					##检查是否是7天无理由
+					#if("1"=="$!{detail.order.getAttribute('7d')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xbqt090304.php?ad_id=&am_id=130011831021c2f3caab&cm_id=&pm_id=" title="消费者保障服务，卖家承诺7天退换" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_7-day_return_16x16.png')}" alt="消费者保障服务，卖家承诺7天退换" /></a>
+					#end
+					##检测是否先行赔付(如实描述)
+					#if("1"=="$!{detail.order.getAttribute('ppay')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_rsms.php?ad_id=&am_id=130011830696bce9eda3&cm_id=&pm_id=" title="消费者保障服务，卖家承诺如实描述" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_true_description_16x16.png')}" alt="消费者保障服务，卖家承诺如实描述" /></a>
+					#end
+					##检测是否正品保障
+					#if("1"=="$!{detail.order.getAttribute('zpbz')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_zpbz.php?ad_id=&am_id=130011830709c0515500&cm_id=&pm_id=" title="消费者保障服务，卖家承诺正品保障" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_quality_item_16x16.png')}" alt="消费者保障服务，卖家承诺正品保障" /></a>
+					#end
+                </p>
+            #end
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table cellspacing="0" cellpadding="0" class="rf-table">
+        <colgroup>
+            <col width="70">
+            <col>
+        </colgroup>
+        <tbody>
+        <tr>
+            <th>
+                买家要求：
+            </th>
+            <td>$!detail.getRequiredTypeText()</td>
+        </tr>
+        <tr>
+            <th>
+                退款金额：
+            </th>
+            <td><em class="money">$!moneyUtil.getMoney($!detail.feeByRefund)</em>元</td>
+        </tr>
+        <tr>
+            <th>
+                退款原因：
+            </th>
+            <td>$!detail.reasonText</td>
+        </tr>
+        <tr>
+            <th>
+                问题描述：
+            </th>
+            <td class="J_DisplayDesc">
+                $!detail.reasonSubText
+                <span class="icon icon-show"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                编号：
+            </th>
+            <td>$!detail.id</td>
+        </tr>
+        <tr>
+            <th>
+                申请时间：
+            </th>
+            <td>$!calendarUtil.formatDate($!{detail.gmtCreate},"yyyy-MM-dd") $!calendarUtil.formatDate($!{detail.gmtCreate},"HH:mm:ss")</td>
+        </tr>
+        </tbody>
+    </table>
+
+        <hr />
+        
+    <table cellspacing="0" cellpadding="0" id="J_OrderInfo" class="rf-table seller-itemInfo">
+        <colgroup>
+            <col width="70">
+            <col>
+        </colgroup>
+        <tbody>
+        #if($!{userRole} == "seller")
+        <tr>
+            <th>
+                买家：
+            </th>
+            <td> <a href="${memberModule.setTarget('/userProfile.jhtml').addQueryData('userID',$!{detail.getBuyerId()})}" target="_blank">$!{detail.buyerNick}</a>
+            	<span class="J_WangWang" data-nick="$!{detail.buyerNick}"></span></td>
+        </tr>
+        #elseif($!{userRole} == "buyer")
+        <tr>
+            <th>
+                卖家：
+            </th>
+            <td> <a href="${memberModule.setTarget('/userProfile.jhtml').addQueryData('userID',$!{detail.getSellerId()})}" target="_blank">$!{detail.sellerNick}</a>
+            	<span class="J_WangWang" data-nick="$!{detail.sellerNick}"></span></td>
+        </tr>
+        #end
+        
+        </tbody>
+    </table>
+    
+        <hr />
+        
+    <table cellspacing="0" cellpadding="0" id="J_OrderInfo" class="rf-table seller-itemInfo">
+        <colgroup>
+            <col width="70">
+            <col>
+        </colgroup>
+        <tbody>
+        #if($detail.payOrderDO)
+        <tr>
+            <th>
+                订单编号：
+            </th>
+            <td> <a class="text-link" href="${tradeModule.setTarget('/detail/trade_item_detail.htm').addQueryData('bizOrderId',$!{detail.payOrderDO.payOrderId})}" target="_blank">$!{detail.payOrderDO.payOrderId}</a> </td>
+        </tr>
+        #end
+        #if($!{userRole} == "seller")
+        <tr>
+            <th>
+                买家支付宝：
+            </th>
+            <td> $!detail.buyerPaymentDO.outUser</td>
+        </tr>
+        #end
+        #if(${detail.order})##订单为空这段没有意义
+        <tr>
+            <th>
+                单价：
+            </th>
+            <td>$!moneyUtil.getMoney($!{detail.order.auctionPrice}) 元 * $!{detail.order.buyAmount} （数量）</td>
+        </tr>
+        <tr>
+            <th>
+                宝贝优惠：
+            </th>
+            <td>
+            #if(!$!orderUtil.isTbVip($!detail.order) && !$!orderUtil.isBonus($!detail.order) && !$!orderUtil.isTjk($!detail.order) && !$!orderUtil.isVip($!detail.order) && $!detail.order.getAdjustFee()==0 && !$!detail.orderUtil.isCombo($!detail.order))
+            	无优惠
+            #else
+            	#if($orderUtil.isTbVip($!detail.order))
+        			<li><img src="$!{assetsServer.getURI('/sys/common/icon/trade/discount_vip.png')}" alt="vip"></li>
+        		#end
+        		#if($orderUtil.isBonus($!detail.order))
+        			<li><img alt="抵价券" src="$!{assetsServer.getURI('/sys/common/icon/trade/discount.png')}"/></li>
+        		#end
+        		#if($orderUtil.isTjk($!detail.order))
+        			<li><img alt="其它优惠" src="$!{assetsServer.getURI('/sys/common/icon/trade/discount_other.png')}"/></li>
+        		#end
+        		#if($orderUtil.isVip($!detail.order))
+        			<li><img alt="店铺VIP" src="$!{assetsServer.getURI('/sys/common/icon/trade/discount_shop_vip.png')}"/></li>
+				#end
+        		#if($!{detail.order.getAdjustFee()} && $!{detail.order.getAdjustFee()} != 0)
+        			<li>卖家优惠$!moneyUtil.getMoney($!{detail.order.getAdjustFee()})元</li>
+        		#end
+        		#if($orderUtil.isCombo($!detail.order))
+        			<li>套餐优惠$!moneyUtil.getMoney(${detail.order.getDiscountFee()})元</li>
+        	    #end
+            #end
+            </td>
+        </tr>
+        <tr>
+            <th>
+                宝贝实付：
+            </th>
+            <td> <em class="money">$!moneyUtil.getMoney($math.add($math.sub($math.mul($!{detail.order.getAuctionPrice()},$!{detail.order.getBuyAmount()}),$!{detail.order.getDiscountFee()}),$!{detail.order.getAdjustFee()}))</em>元</td>
+        </tr>
+        <tr>
+            <th>
+                运费：
+            </th>
+            <td> $!moneyUtil.getMoney($!detail.logisticsOrderDO.getPostFee()) 元</td>
+        </tr>
+        #end
+        </tbody>
+    </table>
+        
+</aside>
+<!-- 订单 end-->
+
+#end
+#**
+引入示例
+/**
+ * <li><b>申请售后服务页面引入示例</b>$control.setTemplate("common/order.vm").setParameter("orderId", $!orderId).setParameter("requiredType", $!requiredType)
+ * <li><b>卖家详情页面引入</b>$control.setTemplate("common/order.vm").setParameter("userRole", "seller")
+ * <li><b>买家详情页面引入</b>$control.setTemplate("common/order.vm").setParameter("userRole", "buyer")
+ * */
+**#
+
+#if($!order)
+##有order订单，为申请页面
+<!-- 订单 信息START -->
+<aside  class="f-l order aside"  data-spm="1000703">
+
+    <div class="order-header">
+        <strong>$!requiredTypeText</strong>
+    </div>
+    <table cellspacing="0" cellpadding="0" class="rf-table">
+        <colgroup>
+            <col width="70">
+            <col>
+        </colgroup>
+        <tbody>
+        <tr class="goods-wrapper">
+            <th>
+
+                <img title="$order.auctionTitle" class="goods-img"
+                     src="#if($tbStringUtil.isNotEmpty($!order.auctionPictUrl))${uploadImageServer.getURI($!order.auctionPictUrl)}_sum.jpg #else $!picsServer.getURI('/bao/album/sys/icon/nopic.gif')#end"/>
+
+            </th>
+            <td>
+                <p class="goods-title">
+                    <a href="${tradeModule.setTarget('/detail/trade_item_detail.htm').addQueryData('bizOrderId',${order.parentId})}"
+                       target="_blank">$!securityUtil.richtext($!{order.AuctionTitle})</a>
+                </p>
+                <p class="goods-sku">
+                #if($!stringUtil.isNotEmpty($!orderUtil.getSkuStr($!order)))
+					<p class="goods-sku">$!securityUtil.richtext($orderUtil.getSkuTitle($!order))</p>
+				#end
+                </p>
+                
+                <p class="goods-icons"> 
+	                ##消保图片样式
+					#if("1"=="$!{order.getAttribute('j13')}")
+						<a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_jyps.php?ad_id=&am_id=1300118304240d56fca9&cm_id=&pm_id=" title="消费者保障服务，卖家承诺假一赔三" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/an_authentic_item_16x16.png')}" alt="消费者保障服务，卖家承诺假一赔三" /></a>
+					#end
+					##检查是否支持数码与家电30天维修
+					#if("1"=="$!{order.getAttribute('3c3')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_wx.php?ad_id=&am_id=13001183050ce2498755&cm_id=&pm_id=" title="消费者保障服务，卖家承诺30天维修" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_30-day_guarantee_16x16.png')}" alt="消费者保障服务，卖家承诺30天维修" /></a>
+					#end
+					##检测是否闪电发货
+					#if("1"=="$!{order.getAttribute('qk')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_sdfh.php?ad_id=&am_id=13001183083c787ce2b4&cm_id=&pm_id=" title="卖家承诺付款后1小时发货" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_thunder-like_delivery_16x16.png')}" alt="卖家承诺付款后1小时发货" /></a>
+					#end
+					##实物闪电发货（商品打标项目增加：也是一种消保服务，和虚拟物品闪电发货共用一个消保图标,业务细节请咨询凌宝）
+					#if($!{orderUtil.getItemTagContainer($!order).isSwift()})
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_sdfh.php?ad_id=&am_id=13001183083c787ce2b4&cm_id=&pm_id=" title="卖家承诺付款后24小时内发货" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_thunder-like_delivery_16x16.png')}" alt="卖家承诺付款后24小时内发货" /></a>
+					#end
+					##检查是否是7天无理由
+					#if("1"=="$!{order.getAttribute('7d')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xbqt090304.php?ad_id=&am_id=130011831021c2f3caab&cm_id=&pm_id=" title="消费者保障服务，卖家承诺7天退换" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_7-day_return_16x16.png')}" alt="消费者保障服务，卖家承诺7天退换" /></a>
+					#end
+					##检测是否先行赔付(如实描述)
+					#if("1"=="$!{order.getAttribute('ppay')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_rsms.php?ad_id=&am_id=130011830696bce9eda3&cm_id=&pm_id=" title="消费者保障服务，卖家承诺如实描述" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_true_description_16x16.png')}" alt="消费者保障服务，卖家承诺如实描述" /></a>
+					#end
+					##检测是否正品保障
+					#if("1"=="$!{order.getAttribute('zpbz')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_zpbz.php?ad_id=&am_id=130011830709c0515500&cm_id=&pm_id=" title="消费者保障服务，卖家承诺正品保障" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_quality_item_16x16.png')}" alt="消费者保障服务，卖家承诺正品保障" /></a>
+					#end
+                </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table cellspacing="0" cellpadding="0" class="rf-table">
+        <colgroup>
+            <col width="70">
+            <col>
+        </colgroup>
+        <tbody>
+        <tr>
+            <th>
+                单价：
+            </th>
+            <td>$!moneyUtil.getMoney($!{order.auctionPrice}) 元 * $!{order.buyAmount}（数量）</td>
+        </tr>
+        <tr>
+            <th>
+                宝贝优惠：
+            </th>
+            <td>
+            #if(!$!orderUtil.isTbVip($!order) && !$!orderUtil.isBonus($!order) && !$!orderUtil.isTjk($!order) && !$!orderUtil.isVip($!order) && $!order.getAdjustFee()==0 && !$!orderUtil.isCombo($!order))
+            	无优惠
+            #else
+            	#if($orderUtil.isTbVip($!order))
+        			<li><img src="$!{assetsServer.getURI('/sys/common/icon/trade/discount_vip.png')}" alt="vip"></li>
+        		#end
+        		#if($orderUtil.isBonus($order))
+        			<li><img alt="抵价券" src="$!{assetsServer.getURI('/sys/common/icon/trade/discount.png')}"/></li>
+        		#end
+        		#if($orderUtil.isTjk($order))
+        			<li><img alt="其它优惠" src="$!{assetsServer.getURI('/sys/common/icon/trade/discount_other.png')}"/></li>
+        		#end
+        		#if($orderUtil.isVip($order))
+        			<li><img alt="店铺VIP" src="$!{assetsServer.getURI('/sys/common/icon/trade/discount_shop_vip.png')}"/></li>
+				#end
+        		#if($!{order.getAdjustFee()} && $!{order.getAdjustFee()} != 0)
+        			<li>卖家优惠$!moneyUtil.getMoney($!{order.getAdjustFee()})元</li>
+        		#end
+        		#if($orderUtil.isCombo($order))
+        			<li>套餐优惠$!moneyUtil.getMoney(${order.getDiscountFee()})元</li>
+        	    #end
+            #end
+            </td>
+        </tr>
+        <tr>
+            <th>
+                宝贝实付：
+            </th>
+            <td> <em class="money">$!moneyUtil.getMoney($math.add($math.sub($math.mul($!{order.getAuctionPrice()},$!{order.getBuyAmount()}),$!{order.getDiscountFee()}),$!{order.getAdjustFee()}))</em>元</td>
+        </tr>
+        <tr>
+            <th>
+                运费：
+            </th>
+            <td> $!moneyUtil.getMoney($!logistics.getPostFee()) 元</td>
+        </tr>
+        <tr>
+            <th>
+                订单编号：
+            </th>
+            <td> <a class="text-link" href="${tradeModule.setTarget('/detail/trade_item_detail.htm').addQueryData('bizOrderId',$!{payOrder.payOrderId})}" target="_blank">$!{payOrder.payOrderId}</a> </td>
+        </tr>
+        </tbody>
+    </table>
+    <hr />
+    <table cellspacing="0" cellpadding="0" id="J_OrderInfo" class="rf-table seller-itemInfo">
+        <colgroup>
+            <col width="70">
+            <col>
+        </colgroup>
+        <tbody>
+        <tr>
+            <th>
+                卖家：
+            </th>
+            <td> <a href="${memberModule.setTarget('/userProfile.jhtml').addQueryData('userID',$!{order.getSellerId()})}" target="_blank">$!{order.sellerNick}</a>
+            	<span class="J_WangWang" data-nick="$!{order.sellerNick}"></span></td>
+        </tr>
+        
+        </tbody>
+    </table>
+</aside>
+<!-- 订单 end-->
+##----------------------------------------------------------------------------------------------------------------------------------------##
+##----------------------------------------------------------------------------------------------------------------------------------------##
+##----------------------------------------------------------------------------------------------------------------------------------------##
+#elseif($!detail)
+##有detialVO，为详情页面
+<!-- 订单 信息START -->
+<aside  class="f-r order aside"  data-spm="1000703">
+
+    <div class="order-header">
+        <strong>$!detail.getRequiredTypeText()</strong>
+    </div>
+    <table cellspacing="0" cellpadding="0" class="rf-table">
+        <colgroup>
+            <col width="70">
+            <col>
+        </colgroup>
+        <tbody>
+        <tr class="goods-wrapper">
+            <th>
+
+                <img title="$detail.order.auctionTitle" class="goods-img"
+                     src="#if($tbStringUtil.isNotEmpty($!detail.order.auctionPictUrl))${uploadImageServer.getURI($!detail.order.auctionPictUrl)}_sum.jpg #else $!picsServer.getURI('/bao/album/sys/icon/nopic.gif')#end"/>
+
+            </th>
+            <td>
+            #if(${detail.order})##订单为空这段没有意义
+                <p class="goods-title">
+                    <a href="${tradeModule.setTarget('/detail/trade_item_detail.htm').addQueryData('bizOrderId',${detail.order.parentId})}"
+                       target="_blank">$!securityUtil.richtext($!{detail.order.AuctionTitle})</a>
+                </p>
+                <p class="goods-sku">
+                #if($!stringUtil.isNotEmpty($!orderUtil.getSkuStr($!detail.order)))
+					<p class="goods-sku">$!securityUtil.richtext($orderUtil.getSkuTitle($!detail.order))</p>
+				#end
+                </p>
+                
+                <p class="goods-icons"> 
+	                ##消保图片样式
+					#if("1"=="$!{detail.order.getAttribute('j13')}")
+						<a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_jyps.php?ad_id=&am_id=1300118304240d56fca9&cm_id=&pm_id=" title="消费者保障服务，卖家承诺假一赔三" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/an_authentic_item_16x16.png')}" alt="消费者保障服务，卖家承诺假一赔三" /></a>
+					#end
+					##检查是否支持数码与家电30天维修
+					#if("1"=="$!{detail.order.getAttribute('3c3')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_wx.php?ad_id=&am_id=13001183050ce2498755&cm_id=&pm_id=" title="消费者保障服务，卖家承诺30天维修" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_30-day_guarantee_16x16.png')}" alt="消费者保障服务，卖家承诺30天维修" /></a>
+					#end
+					##检测是否闪电发货
+					#if("1"=="$!{detail.order.getAttribute('qk')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_sdfh.php?ad_id=&am_id=13001183083c787ce2b4&cm_id=&pm_id=" title="卖家承诺付款后1小时发货" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_thunder-like_delivery_16x16.png')}" alt="卖家承诺付款后1小时发货" /></a>
+					#end
+					##实物闪电发货（商品打标项目增加：也是一种消保服务，和虚拟物品闪电发货共用一个消保图标,业务细节请咨询凌宝）
+					#if($!{orderUtil.getItemTagContainer($!detail.order).isSwift()})
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_sdfh.php?ad_id=&am_id=13001183083c787ce2b4&cm_id=&pm_id=" title="卖家承诺付款后24小时内发货" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_thunder-like_delivery_16x16.png')}" alt="卖家承诺付款后24小时内发货" /></a>
+					#end
+					##检查是否是7天无理由
+					#if("1"=="$!{detail.order.getAttribute('7d')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xbqt090304.php?ad_id=&am_id=130011831021c2f3caab&cm_id=&pm_id=" title="消费者保障服务，卖家承诺7天退换" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_7-day_return_16x16.png')}" alt="消费者保障服务，卖家承诺7天退换" /></a>
+					#end
+					##检测是否先行赔付(如实描述)
+					#if("1"=="$!{detail.order.getAttribute('ppay')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_rsms.php?ad_id=&am_id=130011830696bce9eda3&cm_id=&pm_id=" title="消费者保障服务，卖家承诺如实描述" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_true_description_16x16.png')}" alt="消费者保障服务，卖家承诺如实描述" /></a>
+					#end
+					##检测是否正品保障
+					#if("1"=="$!{detail.order.getAttribute('zpbz')}")
+	                   <a class="xiaobao" href="http://www.taobao.com/go/act/315/xfzbz_zpbz.php?ad_id=&am_id=130011830709c0515500&cm_id=&pm_id=" title="消费者保障服务，卖家承诺正品保障" target="_blank"><img src="$!{assetsServer.getURI('tbsp/icon/xiaobao/a_quality_item_16x16.png')}" alt="消费者保障服务，卖家承诺正品保障" /></a>
+					#end
+                </p>
+            #end
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table cellspacing="0" cellpadding="0" class="rf-table">
+        <colgroup>
+            <col width="70">
+            <col>
+        </colgroup>
+        <tbody>
+        <tr>
+            <th>
+                买家要求：
+            </th>
+            <td>$!detail.getRequiredTypeText()</td>
+        </tr>
+        <tr>
+            <th>
+                退款金额：
+            </th>
+            <td><em class="money">$!moneyUtil.getMoney($!detail.feeByRefund)</em>元</td>
+        </tr>
+        <tr>
+            <th>
+                退款原因：
+            </th>
+            <td>$!detail.reasonText</td>
+        </tr>
+        <tr>
+            <th>
+                问题描述：
+            </th>
+            <td class="J_DisplayDesc">
+                $!detail.reasonSubText
+                <span class="icon icon-show"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                编号：
+            </th>
+            <td>$!detail.id</td>
+        </tr>
+        <tr>
+            <th>
+                申请时间：
+            </th>
+            <td>$!calendarUtil.formatDate($!{detail.gmtCreate},"yyyy-MM-dd") $!calendarUtil.formatDate($!{detail.gmtCreate},"HH:mm:ss")</td>
+        </tr>
+        </tbody>
+    </table>
+
+        <hr />
+        
+    <table cellspacing="0" cellpadding="0" id="J_OrderInfo" class="rf-table seller-itemInfo">
+        <colgroup>
+            <col width="70">
+            <col>
+        </colgroup>
+        <tbody>
+        #if($!{userRole} == "seller")
+        <tr>
+            <th>
+                买家：
+            </th>
+            <td> <a href="${memberModule.setTarget('/userProfile.jhtml').addQueryData('userID',$!{detail.getBuyerId()})}" target="_blank">$!{detail.buyerNick}</a>
+            	<span class="J_WangWang" data-nick="$!{detail.buyerNick}"></span></td>
+        </tr>
+        #elseif($!{userRole} == "buyer")
+        <tr>
+            <th>
+                卖家：
+            </th>
+            <td> <a href="${memberModule.setTarget('/userProfile.jhtml').addQueryData('userID',$!{detail.getSellerId()})}" target="_blank">$!{detail.sellerNick}</a>
+            	<span class="J_WangWang" data-nick="$!{detail.sellerNick}"></span></td>
+        </tr>
+        #end
+        
+        </tbody>
+    </table>
+    
+        <hr />
+        
+    <table cellspacing="0" cellpadding="0" id="J_OrderInfo" class="rf-table seller-itemInfo">
+        <colgroup>
+            <col width="70">
+            <col>
+        </colgroup>
+        <tbody>
+        #if($detail.payOrderDO)
+        <tr>
+            <th>
+                订单编号：
+            </th>
+            <td> <a class="text-link" href="${tradeModule.setTarget('/detail/trade_item_detail.htm').addQueryData('bizOrderId',$!{detail.payOrderDO.payOrderId})}" target="_blank">$!{detail.payOrderDO.payOrderId}</a> </td>
+        </tr>
+        #end
+        #if($!{userRole} == "seller")
+        <tr>
+            <th>
+                买家支付宝：
+            </th>
+            <td> $!detail.buyerPaymentDO.outUser</td>
+        </tr>
+        #end
+        #if(${detail.order})##订单为空这段没有意义
+        <tr>
+            <th>
+                单价：
+            </th>
+            <td>$!moneyUtil.getMoney($!{detail.order.auctionPrice}) 元 * $!{detail.order.buyAmount} （数量）</td>
+        </tr>
+        <tr>
+            <th>
+                宝贝优惠：
+            </th>
+            <td>
+            #if(!$!orderUtil.isTbVip($!detail.order) && !$!orderUtil.isBonus($!detail.order) && !$!orderUtil.isTjk($!detail.order) && !$!orderUtil.isVip($!detail.order) && $!detail.order.getAdjustFee()==0 && !$!detail.orderUtil.isCombo($!detail.order))
+            	无优惠
+            #else
+            	#if($orderUtil.isTbVip($!detail.order))
+        			<li><img src="$!{assetsServer.getURI('/sys/common/icon/trade/discount_vip.png')}" alt="vip"></li>
+        		#end
+        		#if($orderUtil.isBonus($!detail.order))
+        			<li><img alt="抵价券" src="$!{assetsServer.getURI('/sys/common/icon/trade/discount.png')}"/></li>
+        		#end
+        		#if($orderUtil.isTjk($!detail.order))
+        			<li><img alt="其它优惠" src="$!{assetsServer.getURI('/sys/common/icon/trade/discount_other.png')}"/></li>
+        		#end
+        		#if($orderUtil.isVip($!detail.order))
+        			<li><img alt="店铺VIP" src="$!{assetsServer.getURI('/sys/common/icon/trade/discount_shop_vip.png')}"/></li>
+				#end
+        		#if($!{detail.order.getAdjustFee()} && $!{detail.order.getAdjustFee()} != 0)
+        			<li>卖家优惠$!moneyUtil.getMoney($!{detail.order.getAdjustFee()})元</li>
+        		#end
+        		#if($orderUtil.isCombo($!detail.order))
+        			<li>套餐优惠$!moneyUtil.getMoney(${detail.order.getDiscountFee()})元</li>
+        	    #end
+            #end
+            </td>
+        </tr>
+        <tr>
+            <th>
+                宝贝实付：
+            </th>
+            <td> <em class="money">$!moneyUtil.getMoney($math.add($math.sub($math.mul($!{detail.order.getAuctionPrice()},$!{detail.order.getBuyAmount()}),$!{detail.order.getDiscountFee()}),$!{detail.order.getAdjustFee()}))</em>元</td>
+        </tr>
+        <tr>
+            <th>
+                运费：
+            </th>
+            <td> $!moneyUtil.getMoney($!detail.logisticsOrderDO.getPostFee()) 元</td>
+        </tr>
+        #end
+        </tbody>
+    </table>
+        
+</aside>
+<!-- 订单 end-->
+
+#end

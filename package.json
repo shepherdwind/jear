@@ -1,0 +1,35 @@
+{
+  "name": "jear",
+  "description": "jsonify for velocity",
+  "version": "0.1.0",
+  "homepage": "https://github.com/shepherdwind/jear",
+  "author": {
+    "name": "shepherdwind",
+    "email": "eward.song@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/shepherdwind/jear.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shepherdwind/jear/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/shepherdwind/jear/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "lib/index.js",
+  "engines": {
+    "node": ">=0.10"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "devDependencies": {},
+  "keywords": [],
+  "dependencies": {
+    "velocityjs": "~0.3.15"
+  }
+}
