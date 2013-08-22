@@ -1,0 +1,56 @@
+#!/usr/bin/env node
+
+var fs = require('fs')
+var path = require('path')
+var config = JSON.parse(fs.readFileSync(__dirname + '/../package.json'))
+
+var program = require("commander")
+var version = config.version
+
+program.
+  version(version).
+  usage('[option] <file.vm>').
+  option('-o, --output', 'out put filename').
+  option('-p, --parseJSON', 'parse html, get json data')
+
+program.on('--help', function(){
+  console.log('  Examples:')
+  console.log('')
+  console.log('    $ jear xx.vm')
+  console.log('')
+  console.log('  jear@%s %s', version, __filename)
+  console.log('')
+})
+
+program.parse(process.argv)
+
+if (!program.args.length) {
+
+  program.help()
+
+} else {
+
+  var cwd = process.cwd()
+  var jsonify = require('../lib/index')
+
+  if (program.parseJSON) {
+    var parse = require('../lib/parse').parse
+    var file = path.join(cwd, program.args[0])
+    parse(file)
+    return
+  }
+
+  program.args.forEach(function(f){
+    var file = path.join(cwd, f)
+
+    if (!fs.existsSync(file)) return
+
+    var str = fs.readFileSync(file).toString()
+    new jsonify(str)
+  })
+
+}
+
+/**
+ * vim: ft=javascript:tw=80:
+ */
