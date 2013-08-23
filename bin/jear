@@ -1,8 +1,14 @@
 #!/usr/bin/env node
 
+process.env.DEBUG = 'jear'
+var debug = require('debug')('jear')
+
+debug('start')
+
 var fs = require('fs')
 var path = require('path')
 var config = JSON.parse(fs.readFileSync(__dirname + '/../package.json'))
+require('shelljs/global')
 
 var program = require("commander")
 var version = config.version
@@ -41,12 +47,26 @@ if (!program.args.length) {
   }
 
   program.args.forEach(function(f){
-    var file = path.join(cwd, f)
 
-    if (!fs.existsSync(file)) return
+    var file = path.join(cwd, f)
+    var basename = path.basename(f)
+
+    if (!fs.existsSync(file)) return;
 
     var str = fs.readFileSync(file).toString()
-    new jsonify(str)
+
+    var mockDir = path.dirname(file) + '/mock/'
+    if (!test('-d', mockDir)) {
+      mkdir(mockDir)
+      debug('create mock dir')
+    }
+
+    var json = new jsonify(str).toJson()
+
+    debug('get json from file ' + basename)
+    json.to(mockDir + basename)
+    debug('success save mock file to mock/' + basename)
+
   })
 
 }

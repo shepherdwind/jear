@@ -1,7 +1,7 @@
 {
   "name": "jear",
   "description": "jsonify for velocity",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/shepherdwind/jear",
   "author": {
     "name": "shepherdwind",
@@ -24,7 +24,9 @@
   "engines": {
     "node": ">=0.10"
   },
-  "bin": { "jear": "./bin/jear" },
+  "bin": {
+    "jear": "./bin/jear"
+  },
   "scripts": {
     "test": "make test"
   },
@@ -32,6 +34,8 @@
   "keywords": [],
   "dependencies": {
     "velocityjs": "~0.3.15",
-    "commander": "~2.0.0"
+    "commander": "~2.0.0",
+    "shelljs": "~0.1.4",
+    "debug": "~0.7.2"
   }
 }
