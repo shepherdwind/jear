@@ -3,8 +3,6 @@
 process.env.DEBUG = 'jear'
 var debug = require('debug')('jear')
 
-debug('start')
-
 var fs = require('fs')
 var path = require('path')
 var config = JSON.parse(fs.readFileSync(__dirname + '/../package.json'))
@@ -16,13 +14,16 @@ var version = config.version
 program.
   version(version).
   usage('[option] <file.vm>').
-  option('-o, --output', 'out put filename').
+  option('-o, --output <filename>', 'out put filename').
   option('-p, --parseJSON', 'parse html, get json data')
 
 program.on('--help', function(){
   console.log('  Examples:')
   console.log('')
   console.log('    $ jear xx.vm')
+  console.log('    $ jear -p xx.html')
+  console.log('    $ #pase xx.html to a.json')
+  console.log('    $ jear -p -o a.json xx.html')
   console.log('')
   console.log('  jear@%s %s', version, __filename)
   console.log('')
@@ -40,11 +41,27 @@ if (!program.args.length) {
   var jsonify = require('../lib/index')
 
   if (program.parseJSON) {
+
+    debug('start parse html to json')
     var parse = require('../lib/parse').parse
     var file = path.join(cwd, program.args[0])
-    parse(file)
+    var json = parse(file)
+
+    var output = program.output
+    if (output) {
+      debug('save file to %s', output)
+      json.to(path.join(cwd, output))
+      debug('save json file success')
+    } else {
+      console.log(json)
+    }
+
+    debug('get json success')
+
     return
   }
+
+  debug('start')
 
   program.args.forEach(function(f){
 
